@@ -177,6 +177,9 @@ function getTabs() {
     }, {
         href: '#/dashboard/playback/streaming',
         name: globalize.translate('TabStreaming')
+    }, {
+        href: '#/dashboard/playback/trickplay',
+        name: globalize.translate('Trickplay')
     }];
 }
 
@@ -222,13 +225,11 @@ $(document).on('pageinit', '#encodingSettingsPage', function () {
 
         if (this.value === 'videotoolbox') {
             page.querySelector('.videoToolboxTonemappingOptions').classList.remove('hide');
-            page.querySelector('.allowAv1EncodingOption').classList.add('hide');
         } else {
             page.querySelector('.videoToolboxTonemappingOptions').classList.add('hide');
-            page.querySelector('.allowAv1EncodingOption').classList.remove('hide');
         }
 
-        if (systemInfo.OperatingSystem.toLowerCase() === 'linux' && (this.value == 'qsv' || this.value == 'vaapi')) {
+        if (this.value == 'qsv' || this.value == 'vaapi') {
             page.querySelector('.vppTonemappingOptions').classList.remove('hide');
         } else {
             page.querySelector('.vppTonemappingOptions').classList.add('hide');
@@ -253,21 +254,6 @@ $(document).on('pageinit', '#encodingSettingsPage', function () {
         }
 
         setDecodingCodecsVisible(page, this.value);
-    });
-    $('#btnSelectEncoderPath', page).on('click.selectDirectory', function () {
-        import('../../components/directorybrowser/directorybrowser').then(({ default: DirectoryBrowser }) => {
-            const picker = new DirectoryBrowser();
-            picker.show({
-                includeFiles: true,
-                callback: function (path) {
-                    if (path) {
-                        $('.txtEncoderPath', page).val(path);
-                    }
-
-                    picker.close();
-                }
-            });
-        });
     });
     $('#btnSelectTranscodingTempPath', page).on('click.selectDirectory', function () {
         import('../../components/directorybrowser/directorybrowser').then(({ default: DirectoryBrowser }) => {
